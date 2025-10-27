@@ -16,7 +16,7 @@ This research work considers the permanent magnet synchronous machine as the tra
  $\frac{di_{d}}{dt}=-\frac{R_{s}}{L_{d}}i_{d}+\frac{\omega_e L_{q}}{L_{d}}i_{q}+\frac{v_{d}}{L_{d}}$
 
 
-$ \frac{di_{q}}{dt}=-\frac{\omega_e L_{d}}{L_{q}}i_{d}-\frac{R_{s}}{L_{q}}i_{q}+\frac{v_{q}}{L_{q}}-\frac{\omega_e\lambda_{m}}{L_{q}}$
+$\frac{di_{q}}{dt}=-\frac{\omega_e L_{d}}{L_{q}}i_{d}-\frac{R_{s}}{L_{q}}i_{q}+\frac{v_{q}}{L_{q}}-\frac{\omega_e\lambda_{m}}{L_{q}} $
 
 $T_{e}=\frac{3}{2}p(\lambda_{m}i_{q}+(L_d-L_q)i_di_q)$
 
