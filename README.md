@@ -27,7 +27,8 @@ where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}
 ## Hardware Implementation 
 The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and a 5 kVA power source. Each electric machine is coupled with a 1 kW DC generator, which serves as an electric load to emulate the road load conditions.
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
-<p align="center">![Hardware](https://github.com/user-attachments/assets/60c111f8-e9ba-4bad-8bf9-26447f67fab5)
+<p align="center"><img width="781" height="599" alt="image" src="https://github.com/user-attachments/assets/1c691ef4-87b3-4312-b687-6f033935eb34" />
+
 
 
 
