@@ -25,8 +25,9 @@ $J\frac{d\omega}{dt}=T_{e}-T_{L}-F\omega$
 where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}$ is stator resistance, $\omega_e$ is angular electrical velocity, $T_{e}$ is machine torque, $p$ is number of poles, $\lambda_{m}$ is flux linkage, $T_{L}$ is load torque, $J$ is machine's rotor inertia, $F$ is viscous coefficient, $v_{d}$ direct axis voltage, $v_{q}$ is quadrature axis voltage and lastly $L_{q}$ and $L_{d}$ are equivalent quadrature and direct axis inductance respectively. 
 
 ## Hardware Implementation 
-The setup includes two 3 kW three-phase PMSM/BLDC machines, a 5 kW inverter, and a 5 kVA power source. Each electric machine is coupled with a 1 kW DC generator, which serves as an electric load to emulate the road load conditions.
+The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and a 5 kVA power source. Each electric machine is coupled with a 1 kW DC generator, which serves as an electric load to emulate the road load conditions.
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
-<p align="center">![Hardware](https://github.com/user-attachments/assets/7a8a1fe7-a75e-4e92-bab7-de507a57f4f0)
+<p align="center">![Hardware](https://github.com/user-attachments/assets/60c111f8-e9ba-4bad-8bf9-26447f67fab5)
+
 
 
