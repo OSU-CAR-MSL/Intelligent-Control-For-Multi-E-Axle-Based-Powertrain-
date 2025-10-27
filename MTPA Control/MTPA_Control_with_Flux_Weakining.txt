@@ -1,0 +1,265 @@
+% PMSM Parameters 
+Rs = 0.0101;
+Ld = 2.4368e-04;
+Lq = 2.9758e-04;
+flux = 0.0437; % Flux linkage [Wb]
+rated_speed_mech = 170.73 * 9.5436; % Convert RPM to rad/s (mechanical)
+rated_torque = 205; % Rated Torque [Nm]
+Vdc = 325; % DC Link Voltage [V] 
+I_max = 107; % Max Current [A]
+p = 8; % Number of pole pairs
+% Derived Constants
+V_max = Vdc / sqrt(3); % Max phase voltage for Space Vector Modulation (SVM)
+fprintf('V_max (phase peak): %.2f V\n', V_max);
+
+%% 1. MTPA Curve Calculation
+num_points = 200;
+T_vector = linspace(1, rated_torque*1.1, num_points); % Torque vector
+I_d_mtpa = zeros(1, num_points);
+I_q_mtpa = zeros(1, num_points);
+I_s_mtpa = zeros(1, num_points);
+
+for i = 1:length(T_vector)
+    T_desired = T_vector(i);
+    fun = @(i_q) calc_torque_mtpa(i_q, T_desired, flux, Ld, Lq, p);
+    i_q_guess = T_desired / ((3/2)*p*flux);
+    options = optimset('Display', 'off', 'TolFun', 1e-9);
+    i_q_solution = fsolve(fun, i_q_guess, options);
+    i_d_solution = (flux / (2*(Lq - Ld))) - sqrt( (flux/(2*(Lq - Ld)))^2 + i_q_solution^2 );
+    
+    I_q_mtpa(i) = i_q_solution;
+    I_d_mtpa(i) = i_d_solution;
+    I_s_mtpa(i) = sqrt(i_d_solution^2 + i_q_solution^2);
+    
+    % Stop if current exceeds maximum
+    if I_s_mtpa(i) > I_max * 1.05
+        break;
+    end
+end
+% Truncate arrays to valid points
+valid_idx = I_s_mtpa > 0;
+T_vector = T_vector(valid_idx);
+I_d_mtpa = I_d_mtpa(valid_idx);
+I_q_mtpa = I_q_mtpa(valid_idx);
+I_s_mtpa = I_s_mtpa(valid_idx);
+
+% Find rated operating point (on MTPA, at I_max)
+[~, rated_idx] = min(abs(I_s_mtpa - I_max));
+i_d_rated = I_d_mtpa(rated_idx);
+i_q_rated = I_q_mtpa(rated_idx);
+T_rated = T_vector(rated_idx);
+fprintf('Rated Operating Point: i_d=%.2f A, i_q=%.2f A, I_s=%.2f A, T=%.2f Nm\n', ...
+         i_d_rated, i_q_rated, I_s_mtpa(rated_idx), T_rated);
+
+%% 2. Find Base Speed (where MTPA hits voltage limit)
+% Calculate required voltage for rated point as a function of speed
+voltage_eq = @(w) sqrt( (Rs*i_d_rated - w*Lq*i_q_rated)^2 + (Rs*i_q_rated + w*Ld*i_d_rated + w*flux)^2 );
+% Find the speed where this voltage equals V_max
+w_base_elec = fzero(@(w) voltage_eq(w) - V_max, 1000);
+w_base_mech = w_base_elec / p;
+fprintf('Base Speed (electrical): %.2f rad/s\n', w_base_elec);
+fprintf('Base Speed (mechanical): %.2f rad/s (%.2f RPM)\n', w_base_mech, w_base_mech/9.5436);
+
+%% 3. MTPV Curve Calculation (Flux-Weakening along I_max circle)
+% Define speeds for flux-weakening region (from base speed to higher speeds)
+w_elec_fw = linspace(w_base_elec, w_base_elec * 3, 50); % Electrical speeds
+
+% Initialize MTPV arrays
+I_d_mtpv = zeros(size(w_elec_fw));
+I_q_mtpv = zeros(size(w_elec_fw));
+T_mtpv = zeros(size(w_elec_fw));
+
+% For each speed, find the point on the I_max circle that maximizes torque
+% while satisfying the voltage constraint <= V_max.
+theta = linspace(0, pi/2, 200); % We are in the 2nd quadrant (id<0, iq>0)
+i_d_circle = -I_max * cos(theta); % Negative d-axis current
+i_q_circle = I_max * sin(theta);  % Positive q-axis current
+
+for w_idx = 1:length(w_elec_fw)
+    w = w_elec_fw(w_idx);
+    
+    % Calculate voltage for all points on the current circle
+    V_circle = sqrt( (Rs*i_d_circle - w*Lq*i_q_circle).^2 + ...
+                     (Rs*i_q_circle + w*Ld*i_d_circle + w*flux).^2 );
+    
+    % Find points that are within the voltage limit (with a small tolerance)
+    valid_voltage_idx = find(V_circle <= V_max * 1.001); % Allow 0.1% tolerance
+    
+    if isempty(valid_voltage_idx)
+        % No feasible points at this speed (even at max current)
+        I_d_mtpv(w_idx) = NaN;
+        I_q_mtpv(w_idx) = NaN;
+        T_mtpv(w_idx) = 0;
+        continue;
+    end
+    
+    % Calculate torque for all valid points
+    T_circle = (3/2)*p * ( flux*i_q_circle + (Ld-Lq)*i_d_circle.*i_q_circle );
+    T_valid = T_circle(valid_voltage_idx);
+    
+    % Find the point with maximum torque (MTPV)
+    [max_torque, max_idx] = max(T_valid);
+    global_idx = valid_voltage_idx(max_idx);
+    
+    % Store results
+    I_d_mtpv(w_idx) = i_d_circle(global_idx);
+    I_q_mtpv(w_idx) = i_q_circle(global_idx);
+    T_mtpv(w_idx) = max_torque;
+end
+
+%% 4. Calculate Voltage Ellipses for Plotting
+% Choose specific speeds to visualize
+plot_speeds_elec = [w_base_elec*0.8, w_base_elec, w_base_elec*1.5, w_base_elec*2.5];
+num_ellipse_points = 200;
+
+% Initialize cell arrays to store ellipse points
+V_ellipse_id = cell(length(plot_speeds_elec), 1);
+V_ellipse_iq = cell(length(plot_speeds_elec), 1);
+
+for w_idx = 1:length(plot_speeds_elec)
+    w = plot_speeds_elec(w_idx);
+    
+    % Create a fine angular grid
+    alpha = linspace(0, 2*pi, num_ellipse_points);
+    
+    % Initialize arrays for this ellipse
+    id_ellipse = zeros(size(alpha));
+    iq_ellipse = zeros(size(alpha));
+    
+    % Calculate current points for the voltage ellipse
+    for i = 1:length(alpha)
+        % This is a numerical approach to find the ellipse
+        % We solve for the current vector in the direction of alpha that gives V_max
+        direction = [cos(alpha(i)); sin(alpha(i))];
+        
+        % Function to find the scale factor k where |V(k*direction)| = V_max
+        fun_ellipse = @(k) calc_voltage_magnitude(k*direction(1), k*direction(2), w, Rs, Ld, Lq, flux) - V_max;
+        
+        try
+            k_sol = fzero(fun_ellipse, [0, I_max*3]);
+            id_ellipse(i) = k_sol * direction(1);
+            iq_ellipse(i) = k_sol * direction(2);
+        catch
+            % If no solution, skip
+            id_ellipse(i) = NaN;
+            iq_ellipse(i) = NaN;
+        end
+    end
+    
+    % Store results
+    V_ellipse_id{w_idx} = id_ellipse;
+    V_ellipse_iq{w_idx} = iq_ellipse;
+end
+
+%% 5. Plotting the Complete Characteristics
+colors = lines(7); % Get distinct colors
+
+%figure('Position', [100, 100, 1200, 900]);
+figure
+% Subplot 1: Current Locus (id-iq plane) - THE MAIN FLUX WEAKENING PLOT
+subplot(2, 2, [1, 2]); % This subplot spans the top half
+hold on; grid on; box on;
+
+% 1. Plot MTPA curve (Constant Torque, below base speed)
+plot(I_d_mtpa, I_q_mtpa, 'Color', colors(1,:), 'LineWidth', 3, 'DisplayName', 'MTPA Curve');
+
+% 2. Plot current limit circle
+theta_circle = linspace(0, 2*pi, 200);
+plot(I_max*cos(theta_circle), I_max*sin(theta_circle), 'Color', colors(2,:), ...
+     'LineWidth', 2, 'LineStyle', '--', 'DisplayName', 'Current Limit (I_{max})');
+
+% 3. Plot MTPV curve (Flux-weakening region along I_max circle)
+plot(I_d_mtpv, I_q_mtpv, 'Color', colors(3,:), 'LineWidth', 3, 'DisplayName', 'MTPV Curve (Flux Weakening)');
+
+% 4. Plot voltage ellipses at different speeds
+speed_labels = {'Below Base Speed', 'Base Speed', 'FW Region', 'Deep FW'};
+for w_idx = 1:length(plot_speeds_elec)
+    plot(V_ellipse_id{w_idx}, V_ellipse_iq{w_idx}, 'Color', colors(3+w_idx,:), ...
+         'LineWidth', 1.5, 'LineStyle', ':', ...
+         'DisplayName', sprintf('V Limit @%.0f rad/s', plot_speeds_elec(w_idx)));
+end
+
+% 5. Mark key points
+plot(i_d_rated, i_q_rated, 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'r', ...
+     'DisplayName', 'Rated Point (Base Speed)');
+plot(I_d_mtpv(1), I_q_mtpv(1), 'go', 'MarkerSize', 10, 'MarkerFaceColor', 'g', ...
+     'DisplayName', 'FW Start Point');
+
+% Formatting
+xlabel('i_d [A]');
+ylabel('i_q [A]');
+title('Current Plane: MTPA, Flux Weakening (MTPV), and Operating Limits');
+legend('Location', 'southwest');
+axis equal;
+xlim([-I_max*1.2, I_max*0.2]);
+ylim([0, I_max*1.2]);
+
+% Draw quadrant highlighting the flux-weakening region
+fw_region_theta = linspace(pi/2, pi, 50);
+fw_x = I_max * 1.15 * cos(fw_region_theta);
+fw_y = I_max * 1.15 * sin(fw_region_theta);
+patch(fw_x, fw_y, 'r', 'FaceAlpha', 0.1, 'EdgeColor', 'none', ...
+      'DisplayName', 'Flux-Weakening Region');
+
+% Subplot 3: Torque vs. Speed characteristic
+subplot(2, 2, 3);
+hold on; grid on; box on;
+
+% Calculate speed for MTPA points (below base speed)
+w_mech_mtpa = linspace(0, w_base_mech, length(T_vector))';
+
+% Plot constant torque region (MTPA)
+plot(w_mech_mtpa, T_vector, 'Color', colors(1,:), 'LineWidth', 2, 'DisplayName', 'MTPA (Constant Torque)');
+
+% Plot flux-weakening region (MTPV)
+w_mech_mtpv = w_elec_fw' / p;
+plot(w_mech_mtpv, T_mtpv, 'Color', colors(3,:), 'LineWidth', 2, 'DisplayName', 'Flux Weakening (MTPV)');
+
+% Mark base speed
+line([w_base_mech, w_base_mech], [0, rated_torque*1.1], 'Color', 'k', 'LineStyle', '--', ...
+     'DisplayName', 'Base Speed');
+plot(w_base_mech, T_rated, 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');
+
+xlabel('Mechanical Speed [rad/s]');
+ylabel('Torque [Nm]');
+title('Torque-Speed Characteristic');
+legend('Location', 'northeast');
+ylim([0, rated_torque*1.1]);
+
+% Subplot 4: Voltage required vs. Speed
+subplot(2, 2, 4);
+hold on; grid on; box on;
+
+% Calculate voltage for rated current point across speeds
+w_test = linspace(0, w_base_mech*3, 100);
+V_test = zeros(size(w_test));
+for i = 1:length(w_test)
+    w_elec = w_test(i) * p;
+    V_test(i) = calc_voltage_magnitude(i_d_rated, i_q_rated, w_elec, Rs, Ld, Lq, flux);
+end
+
+plot(w_test, V_test, 'b-', 'LineWidth', 2, 'DisplayName', 'Voltage @ Rated Current');
+line([0, max(w_test)], [V_max, V_max], 'Color', 'r', 'LineStyle', '--', ...
+     'LineWidth', 2, 'DisplayName', 'V_{max}');
+line([w_base_mech, w_base_mech], [0, V_max*1.1], 'Color', 'k', 'LineStyle', '--', ...
+     'DisplayName', 'Base Speed');
+plot(w_base_mech, V_max, 'ro', 'MarkerSize', 8, 'MarkerFaceColor', 'r');
+
+xlabel('Mechanical Speed [rad/s]');
+ylabel('Voltage [V]');
+title('Voltage-Speed Requirement');
+legend('Location', 'southeast');
+ylim([0, V_max*1.1]);
+
+%% Helper Functions
+function F = calc_torque_mtpa(i_q, T_desired, flux, Ld, Lq, p)
+    i_d = (flux / (2*(Lq - Ld))) - sqrt( (flux/(2*(Lq - Ld)))^2 + i_q^2 );
+    T_calculated = (3/2) * p * ( flux * i_q + (Ld - Lq) * i_d * i_q );
+    F = T_desired - T_calculated;
+end
+
+function V = calc_voltage_magnitude(i_d, i_q, w, Rs, Ld, Lq, flux)
+    V_d = Rs*i_d - w*Lq*i_q;
+    V_q = Rs*i_q + w*Ld*i_d + w*flux;
+    V = sqrt(V_d^2 + V_q^2);
+end

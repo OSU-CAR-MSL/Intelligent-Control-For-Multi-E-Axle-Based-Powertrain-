@@ -1,0 +1,45 @@
+clc
+clear all
+close all
+%% 
+% PMSM Parameters 
+Rs = 0.0101;
+Ld = 2.4368e-04;
+Lq = 2.9758e-04;
+flux = 0.0437; % Flux linkage [Wb]
+rated_speed = 170.73 * 9.5436; % Convert RPM to rad/s (mechanical)
+Vdc = 325; % DC Link Voltage [V] 
+I_max = 107; % Max Current [A]
+p = 8; % Number of pole pairs
+rated_torque = 205; % Rated Torque [Nm]
+
+%% Current Limit Circle 
+
+I=1:10:I_max;%1:10:I_max;
+Te=1.5.*p.*flux.*I;
+figure
+for i=1:length(I)
+cir = nsidedpoly(1000, 'Center', [0 0], 'Radius', I(i));
+plot(cir,'FaceColor', 'none','DisplayName','Current Limit')
+hold on
+end
+for i=1:length(Te)
+id=-3.*I_max:0.1:0;
+%iq(i,:)=Te(i)./(1.5.*p.*(flux+Ld.*id-Lq.*id));
+k1=(Te(i)./(1.5.*p.*(Ld-Lq)));
+k2=flux./(Ld-Lq);
+iq(i,:)=k1./(k2+id);
+str='T_{e}= ';
+str2=num2str(Te(i));
+string=strcat(str,str2);
+plot(id,iq(i,:),'DisplayName',string)
+hold on
+%legend;
+end
+xline(0)
+iq_tra=sqrt((id.*flux./(Ld-Lq))+id.^2);
+plot(id,iq_tra,'DisplayName','MTPA Trajectory')
+xlabel('i_{d}')
+ylabel('i_{q}')
+%axis equal
+ylim([-1*I_max,I_max])
