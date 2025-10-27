@@ -29,6 +29,13 @@ The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and 
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
 <p align="center"><img width="781" height="599" alt="image" src="https://github.com/user-attachments/assets/1c691ef4-87b3-4312-b687-6f033935eb34" />
 
+# Folders Description 
+1) **E-axle Synchornization Under Uneven Torque Split** Contains a presentation on control strategies to ensure synchronized operation of e-axles under uneven or optimal torque split. (Work in progress.)
+2) **Hardware Development** Includes videos and Simulink models of the control schemes implemented on hardware.
+3) **MTPA Control** Provides scripts to compute the Maximum Torque Per Ampere (MTPA) trajectory for the entire speed and torque range of PMSM. The generated lookup tables are used for integrating MTPA into PMSM control.
+4) **Physics Constraint NN Based Torque Observer** Contains Python code and the dataset used to develop the torque observer based on physics-constrained neural networks.
+5) **Physics Informed NN Based Parameter Estimation** Includes Python code, dataset, and presentation related to the development of parameter estimation using Physics-Informed Neural Networks (PINNs). This work has not yet been reported in the PMSM control literature.
+
 
 
 
