@@ -10,3 +10,16 @@ This step operates at the powertrain level, where it receives the optimal drivin
 # Step 3: Synchronizing Operation of Traction Electric Machines
 At this stage, the impact of optimal torque allocation on traction electric machines (EMs) is addressed, as uneven torque distribution can result in different operating speeds and thermal stresses across the EMs. For safe and reliable vehicle operation, the EMs must remain synchronized in speed. To achieve this, the control strategy assigns adjusted speed references to each EM to ensure coordinated operation.
 My research introduces two key novelties at this level. First, it employs machine learning techniques to model and predict EM dynamics, specifically the actual speed response at given torque and speed requests. The predicted responses of all EMs are then compared; if any EM is found to deviate from synchronized operation, its speed reference is adjusted to restore consistency. Second, I propose a physics-informed neural network (PINN)-based parameter estimation method for EMs, which is not currently present in the literature. In this approach, the PINN simultaneously learns EM parameters and network weights while enforcing physical constraints. The learned parameters are then used to reconstruct EM dynamics and verify convergence. If convergence is not achieved, the learning process is reiterated until accurate synchronization is ensured. By integrating this step with the previous levels of optimization, the proposed framework reduces the overall energy consumption of heavy-duty electric vehicles and extends their driving range.
+## EM Modeling 
+This research work considers the permanent magnet synchronous machine as the traction electric machine. The dynamic equations of PMSM in rotating d-q frame can be expressed as 
+
+ $\frac{di_{d}}{dt}=-\frac{R_{s}}{L_{d}}i_{d}+\frac{\omega_e L_{q}}{L_{d}}i_{q}+\frac{v_{d}}{L_{d}}$
+
+
+$ \frac{di_{q}}{dt}=-\frac{\omega_e L_{d}}{L_{q}}i_{d}-\frac{R_{s}}{L_{q}}i_{q}+\frac{v_{q}}{L_{q}}-\frac{\omega_e\lambda_{m}}{L_{q}}$
+
+$T_{e}=\frac{3}{2}p(\lambda_{m}i_{q}+(L_d-L_q)i_di_q)$
+
+$J\frac{d\omega}{dt}=T_{e}-T_{L}-F\omega$
+
+where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}$ is stator resistance, $\omega_e$ is angular electrical velocity, $T_{e}$ is machine torque, $p$ is number of poles, $\lambda_{m}$ is flux linkage, $T_{L}$ is load torque, $J$ is machine's rotor inertia, $F$ is viscous coefficient, $v_{d}$ direct axis voltage, $v_{q}$ is quadrature axis voltage and lastly $L_{q}$ and $L_{d}$ are equivalent quadrature and direct axis inductance respectively. 
