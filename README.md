@@ -1,3 +1,5 @@
+Copyright (c) 2025 Ahmad Hussain Safder
+
 # Overview
 The intelligent control of heavy-duty electric vehicles consists of three steps. In the first step, the strategy leverages information about upcoming driving conditions (e.g., speed limits, road grade, and lead vehicle behavior) to adjust vehicle speed optimally, which leads to reduced energy consumption while balancing travel time. The second step operates at the powertrain level, optimally distributing torque among multiple e-axles to minimize powertrain losses. Finally, the third step focuses on component-level control, ensuring each electric machine operates in a synchronized manner, even under uneven torque allocation, to guarantee safe and reliable vehicle operation. 
 <p align="center"><img width="718" height="330" alt="image" src="https://github.com/user-attachments/assets/f1ca4fe5-0a4e-4507-946d-e64db335a978" />Overview of Control Scheme</em>
@@ -28,6 +30,23 @@ where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}
 The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and a 5 kVA power source. Each electric machine is coupled with a 1 kW DC generator, which serves as an electric load to emulate the road load conditions.
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
 <p align="center"><img width="781" height="599" alt="image" src="https://github.com/user-attachments/assets/1c691ef4-87b3-4312-b687-6f033935eb34" />
+
+# Folders Description 
+1) **E-axle Synchornization Under Uneven Torque Split** Contains a presentation on control strategies to ensure synchronized operation of e-axles under uneven or optimal torque split. (Work in progress.)
+2) **Hardware Development** Includes videos and Simulink models of the control schemes implemented on hardware.
+3) **MTPA Control** Provides scripts to compute the Maximum Torque Per Ampere (MTPA) trajectory for the entire speed and torque range of PMSM. The generated lookup tables are used for integrating MTPA into PMSM control.
+4) **Physics Constraint NN Based Torque Observer** Contains Python code and the dataset used to develop the torque observer based on physics-constrained neural networks.
+5) **Physics Informed NN Based Parameter Estimation** Includes Python code, dataset, and presentation related to the development of parameter estimation using Physics-Informed Neural Networks (PINNs). This work has not yet been reported in the PMSM control literature.
+
+# Publications 
+1) A. H. Safder, A. Hanif and Q. Ahmed, "Optimal Torque Allocation for Energy Efficient Operation of Dual E-Axle Based Powertrain for Heavy Duty Electric Vehicles," 2025 IEEE/AIAA Transportation Electrification Conference and Electric Aircraft Technologies Symposium ITEC+EATS), Anaheim, CA, USA, 2025, pp. 1-6, doi: 10.1109/ITEC63604.2025.11098060.
+2) A. H Safder, A. Hanif, Q. Ahmed, C. G. Cantimer and V. Horta, “Need of Dynamic Drive Control for Efficient Electrified Powertrain in Automotive Industry”, in 13th IEEE International Conference and Exposition on Electrical and Power Engineering (EPEi), Iaşi, Romania,2024.
+3) A. H. Safder, A. Hanif and Q. Ahmed, "Physics Constrained Neural Network Based Load Torque Observer for Traction Electric Machine," in IEEE Conference on Control Technology and Applications, NEWCASTLE UPON TYNE, UK, 2024.
+4) A. H. Safder, A. Hanif and Q. Ahmed, "Look Ahead Information-Based Optimal Control of Traction Electric Machine for Energy-Efficient Operations," in 25th IEEE Workshop on Control and Modeling for Power Electronics, Lahore, Pakistan, 2024.
+5) A. Hanif, A. H. Safder, Hassam Moazzam and Q. Ahmed, "Linear Parameter Varying Control for Permanent Magnet Synchronous Motor-Based Electrified Powertrain," in IEEE Workshop on Control and Modeling for Power Electronics, Lahore, Pakistan, 2024.
+6) A. H. Safder, A. Hanif and Q. Ahmed, "Load Torque Estimation for Efficient Operation of PMSM-Based Electrified Powertrain," in IEEE Transportation Electrification Conference & Expo (ITEC), Rosemont, 2024.
+7) A. H. Safder, A. Hanif, M. A. Saqib and F. Tanveer, "Compensating the Performance of PMSM Based Electrified Powertrain Through Sliding Mode Control," 2023 IEEE Applied Power Electronics Conference and Exposition (APEC), Orlando, FL, USA, 2023, pp. 2413-2418, doi: 10.1109/APEC43580.2023.10131502.
+
 
 
 
