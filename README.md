@@ -48,7 +48,7 @@ For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Ta
 7) A. H. Safder, A. Hanif, M. A. Saqib and F. Tanveer, "Compensating the Performance of PMSM Based Electrified Powertrain Through Sliding Mode Control," 2023 IEEE Applied Power Electronics Conference and Exposition (APEC), Orlando, FL, USA, 2023, pp. 2413-2418, doi: 10.1109/APEC43580.2023.10131502.
 
 # Patent
-1) 1.	A. H. Safder, A. Hanif and Q. Ahmed,” RANGE EXTENSION WITH OPTIMAL TRACTION CONTROL FOR MULTI E-AXLE BASED ELECTRIFIED VEHICLES”. United States of America Patent 19/207,877, 2025.
+1) A. H. Safder, A. Hanif and Q. Ahmed,” RANGE EXTENSION WITH OPTIMAL TRACTION CONTROL FOR MULTI E-AXLE BASED ELECTRIFIED VEHICLES”. United States of America Patent 19/207,877, 2025.
 
 
 
