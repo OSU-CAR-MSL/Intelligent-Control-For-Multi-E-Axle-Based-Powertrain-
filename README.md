@@ -22,7 +22,13 @@ To enhance robustness, this research incorporates load torque observers to provi
 
 
 # Step 3: Component Level Coordination
-At this stage, the impact of the optimal but uneven torque allocation from Step 2 is managed. While the vehicle enforces speed synchronization, the differing torque commands place asymmetric thermal and mechanical stresses on the electric machines (EMs) and their associated drivetrains. I propose a physics-informed neural network (PINN)-based parameter estimation method for EMs. In this approach, the PINN simultaneously learns EM parameters (e.g., winding resistance, thermal coefficients) and network weights while enforcing physical constraints derived from the motor's electro-thermal dynamics. The learned parameters provide a high-fidelity digital twin of each motor, which is used to verify operational safety and predict remaining useful life. If the model predicts a violation of safety thresholds, it triggers a re-optimization in Step 2.
+At this stage, the framework addresses the operational impacts of the optimal torque allocation determined in Step 2. The asymmetric torque commands cause uneven thermal and mechanical stresses across the electric machines (EMs) and their drivetrains, which can affect long-term reliability and performance.
+
+To proactively manage these effects, this research introduces a novel physics-informed neural network (PINN) for online EM parameter estimation. The PINN architecture simultaneously estimates EM parameters (winding resistance and inductances) while being constrained by the EM dynamics.
+
+The estimated parameters enable high-fidelity estimation of the EM's internal temperature and the parameter variations. This information is used to dynamically calculate a thermally-derated torque limit for each motor to ensure operation remains within safe thermal boundaries.
+
+Furthermore, these real-time parameters and temperature estimates allow for the recalculation of efficiency for each EM. This refined efficiency data is fed back to the powertrain-level optimizer in Step 2, enabling it to adjust the optimal torque allocation strategy. Consequently, the system can proactively redistribute torque to mitigate excessive stress on any single motor, thereby enhancing both the vehicle's operational robustness and the long-term durability of its powertrain components.
 
 The proposed framework not only reduces the overall energy consumption of heavy-duty electric vehicles but also enhances the durability and reliability of the powertrain, thereby extending the vehicle's operational range and service life.
 
