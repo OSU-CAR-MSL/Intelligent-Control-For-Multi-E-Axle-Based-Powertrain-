@@ -10,16 +10,13 @@ This step formulates a cost function that combines the vehicle’s energy consum
 # Step 2: Powertrain Level Optimization 
 This step operates at the powertrain level, where it receives the optimal driving torque from Step 1 along with the current vehicle speed. A cost function is formulated to capture the power losses of key drivetrain components, including the traction electric machines (EMs), gearbox, and differential. Based on this cost function, the controller determines the optimal torque allocation for each e-axle to minimize overall powertrain losses. Similar to Step 1, this strategy employs gradient-based optimization techniques, such as sequential quadratic programming (SQP), to solve the optimal control problem.
 
-My published and ongoing research on this approach consistently demonstrates that an uneven torque split across e-axles is often optimal for minimizing system losses. The optimization is therefore subject to critical constraints, including:
+The published and ongoing research on this approach consistently demonstrates that an uneven torque split across e-axles is often optimal for minimizing system losses. The optimization is subject to critical constraints, including:
 
-1) Individual Motor Torque Envelopes: Ensuring commands remain within peak and continuous torque limits at the operating speed.
+1) **Individual EM Torque Envelopes**: Ensuring commands remain within peak and continuous torque limits at the operating speed.
 
-2) Traction Limits: Calculating the maximum permissible torque for each e-axle based on dynamic vertical load transfer to prevent wheel slip.
+2) **Traction Limits**: Calculating the maximum permissible torque for each e-axle based on dynamic vertical load transfer to prevent wheel slip.
 
-3) Thermal Limits: Monitoring and managing the disparate heat generation in the motors and inverters resulting from uneven loading.
-
-To enhance robustness, this research incorporates load torque observers to provide real-time estimation of actual road load and available traction, making the system adaptive to changing road conditions and parameter uncertainties.
-
+3) **Thermal Limits**: Monitoring and managing the disparate heat generation in the EMs resulting from uneven loading.
 
 # Step 3: Component Level Coordination
 At this stage, the framework addresses the operational impacts of the optimal torque allocation determined in Step 2. The asymmetric torque commands cause uneven thermal and mechanical stresses across the electric machines (EMs) and their drivetrains, which can affect long-term reliability and performance.
