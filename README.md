@@ -16,7 +16,7 @@ The published and ongoing research on this approach consistently demonstrates th
 
 2) **Traction Limits**: Calculating the maximum permissible torque for each e-axle based on dynamic vertical load transfer to prevent wheel slip.
 
-3) **Thermal Limits**: Monitoring and managing the disparate heat generation in the EMs resulting from uneven loading.
+3) **Thermal Limits**: Monitoring and managing the derated torque in the EMs resulting from uneven thermal stress.
 
 # Step 3: Component Level Coordination
 At this stage, the framework addresses the operational impacts of the optimal torque allocation determined in Step 2. The asymmetric torque commands cause uneven thermal and mechanical stresses across the electric machines (EMs) and their drivetrains, which can affect long-term reliability and performance.
@@ -54,7 +54,7 @@ For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Ta
 2) **Hardware Development** Includes videos and Simulink models of the control schemes implemented on hardware.
 3) **MTPA Control** Provides scripts to compute the Maximum Torque Per Ampere (MTPA) trajectory for the entire speed and torque range of PMSM. The generated lookup tables are used for integrating MTPA into PMSM control.
 4) **Physics Constraint NN Based Torque Observer** Contains Python code and the dataset used to develop the torque observer based on physics-constrained neural networks.
-5) **Physics Informed NN Based Parameter Estimation** Includes Python code, dataset, and presentation related to the development of parameter estimation using Physics-Informed Neural Networks (PINNs). This work has not yet been reported in the PMSM control literature.
+5) **Physics Informed NN Based Parameter Estimation** Includes presentation related to the development of parameter estimation using Physics-Informed Neural Networks (PINNs). This work has not yet been reported in the PMSM control literature.
 
 # Publications 
 1) A. H. Safder, A. Hanif and Q. Ahmed, "Optimal Torque Allocation for Energy Efficient Operation of Dual E-Axle Based Powertrain for Heavy Duty Electric Vehicles," 2025 IEEE/AIAA Transportation Electrification Conference and Electric Aircraft Technologies Symposium ITEC+EATS), Anaheim, CA, USA, 2025, pp. 1-6, doi: 10.1109/ITEC63604.2025.11098060.
