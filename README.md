@@ -1,7 +1,7 @@
 Copyright (c) 2025 Ahmad Hussain Safder
 
 # Overview
-The intelligent control of heavy-duty electric vehicles consists of three steps. In the first step, the strategy utilizes information about upcoming driving conditions (e.g., speed limits, road grade, and lead vehicle behavior) to adjust the vehicle's speed optimally, resulting in reduced energy consumption while maintaining a balance between travel time. The second step operates at the powertrain level, optimally distributing torque among multiple e-axles to minimize powertrain losses. Finally, the third step focuses on component-level coordination, ensuring that the uneven torque distribution does not induce harmful thermal or mechanical stresses on each traction electric machine (EM). It guarantees safe and reliable vehicle operation. 
+The intelligent control of heavy-duty electric vehicles consists of three steps. In the first step, the strategy utilizes information about upcoming driving conditions (e.g., speed limits, road grade, and lead vehicle behavior) to adjust the vehicle's speed optimally, resulting in reduced energy consumption while maintaining a balance between travel time. The second step operates at the powertrain level, which allocates torque optimally among multiple e-axles to minimize powertrain losses. Finally, the third step focuses on component-level coordination, ensuring that the uneven torque distribution does not induce harmful thermal or mechanical stresses on each traction electric machine (EM). It guarantees safe and reliable vehicle operation. 
 <p align="center"><img width="718" height="330" alt="image" src="https://github.com/user-attachments/assets/f1ca4fe5-0a4e-4507-946d-e64db335a978" />Overview of Control Scheme</em>
   
 # Step 1: Vehicle Level Optimization 
