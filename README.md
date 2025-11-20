@@ -47,7 +47,10 @@ For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Ta
 
 
 
-https://github.com/user-attachments/assets/aab6cc0b-c27a-4140-8780-a220d0db0514
+
+https://github.com/user-attachments/assets/b31696e0-6871-49aa-afd2-e4d69f09ba99
+
+
 
 
 # Folders Description 
