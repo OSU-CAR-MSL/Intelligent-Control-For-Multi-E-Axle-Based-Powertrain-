@@ -43,6 +43,13 @@ The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and 
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
 <p align="center"><img width="781" height="599" alt="image" src="https://github.com/user-attachments/assets/1c691ef4-87b3-4312-b687-6f033935eb34" />
 
+## Hardware Testing
+
+
+
+https://github.com/user-attachments/assets/aab6cc0b-c27a-4140-8780-a220d0db0514
+
+
 # Folders Description 
 1) **Hardware Development** Includes videos and Simulink models of the control schemes implemented on hardware.
 2) **Intelligent Control for Electric Trucks** Contains a presentation on intelligent control developed for the heavy-duty electric trucks. (Work in progress.)
