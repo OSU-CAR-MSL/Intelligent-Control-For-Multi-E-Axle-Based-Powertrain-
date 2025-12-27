@@ -70,6 +70,6 @@ https://github.com/user-attachments/assets/b31696e0-6871-49aa-afd2-e4d69f09ba99
 7) A. H. Safder, A. Hanif, M. A. Saqib and F. Tanveer, "Compensating the Performance of PMSM Based Electrified Powertrain Through Sliding Mode Control," 2023 IEEE Applied Power Electronics Conference and Exposition (APEC), Orlando, FL, USA, 2023, pp. 2413-2418, doi: 10.1109/APEC43580.2023.10131502.([link](https://ieeexplore.ieee.org/document/10131502))
 
 
-
-
+# Patent
+1) A.H. Safder, A.Hanif, and Q.Ahmed. "Range extension with optimal traction control for multi e-axle based electrified vehicles." U.S. Patent Application No. 19/207,877. ([link](https://patents.google.com/patent/US20250353380A1/en))
 
