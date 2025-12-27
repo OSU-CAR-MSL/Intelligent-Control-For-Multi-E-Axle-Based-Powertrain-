@@ -71,5 +71,5 @@ https://github.com/user-attachments/assets/b31696e0-6871-49aa-afd2-e4d69f09ba99
 
 
 # Patent
-1) A.H. Safder, A.Hanif, and Q.Ahmed. "Range extension with optimal traction control for multi e-axle based electrified vehicles." U.S. Patent Application No. 19/207,877. ([link](https://patents.google.com/patent/US20250353380A1/en))
+1) A. H. Safder, A. Hanif, and Q. Ahmed. "Range extension with optimal traction control for multi e-axle based electrified vehicles." U.S. Patent Application No. 19/207,877. ([link](https://patents.google.com/patent/US20250353380A1/en))
 
