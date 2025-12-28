@@ -38,7 +38,11 @@ $J\frac{d\omega}{dt}=T_{e}-T_{L}-F\omega$
 
 where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}$ is stator resistance, $\omega_e$ is angular electrical velocity, $T_{e}$ is machine torque, $p$ is number of poles, $\lambda_{m}$ is flux linkage, $T_{L}$ is load torque, $J$ is machine's rotor inertia, $F$ is viscous coefficient, $v_{d}$ direct axis voltage, $v_{q}$ is quadrature axis voltage and lastly $L_{q}$ and $L_{d}$ are equivalent quadrature and direct axis inductance respectively. 
 
-## Hardware Implementation 
+## Hardware Testing
+The proposed algorithm is validated through extensive hardware testing. Its real-time implementation capability is evaluated using a hardware-in-the-loop (HIL) setup, while the E-axle electric machine (EM) control performance is assessed using a scale-down EM test bench.
+# Hardware in Loop (HiL) Testing. 
+Steps 1 and 2 of the proposed intelligent controller are validated using a hardware-in-the-loop (HIL) setup. The optimal torque control strategy is implemented on a Speedgoat real-time baseline target, while the vehicle model is executed on a dSPACE SCALEXIO system. A dedicated ControlDesk interface PC is used for real-time signal monitoring and data logging. Communication between the controller and the vehicle model is established via CAN, using a DS6342 CAN module on the SCALEXIO platform and an IO613 CAN module on the Speedgoat system.
+# Scale-Down E-Axle Motor Test Bench and Control Implementation 
 The setup includes two 3 kW three-phase PMSM/BLDC machines, 5 kW inverters, and a 5 kVA power source. Each electric machine is coupled with a 1 kW DC generator, which serves as an electric load to emulate the road load conditions.
 For control implementation, the setup utilizes a Speedgoat Baseline Real-Time Target Machine, which interfaces seamlessly with MATLAB/Simulink. This enables rapid prototyping and deployment of control algorithms using Simulink blocks directly on the real-time hardware.
 <p align="center"><img width="781" height="599" alt="image" src="https://github.com/user-attachments/assets/1c691ef4-87b3-4312-b687-6f033935eb34" />
