@@ -42,7 +42,8 @@ where $i_{q}$ is quadrature axis current, $i_{d}$ is direct axis current, $R_{s}
 The proposed algorithm is validated through extensive hardware testing. Its real-time implementation capability is evaluated using a hardware-in-the-loop (HIL) setup, while the E-axle electric machine (EM) control performance is assessed using a scale-down EM test bench.
 ## Hardware in Loop (HiL) Testing. 
 Steps 1 and 2 of the proposed intelligent controller are validated using a hardware-in-the-loop (HIL) setup. The optimal torque control strategy is implemented on a Speedgoat real-time baseline target, while the vehicle model is executed on a dSPACE SCALEXIO system. A dedicated ControlDesk interface PC is used for real-time signal monitoring and data logging. Communication between the controller and the vehicle model is established via CAN, using a DS6342 CAN module on the SCALEXIO platform and an IO613 CAN module on the Speedgoat system.
-![HIL](https://github.com/user-attachments/assets/0b5f16b8-87cb-4500-b5d9-7cea18728d89)
+![HIL_Updated](https://github.com/user-attachments/assets/a40dd8b7-57ff-4030-8877-884ac51edf53)
+
 
 
 ## Scale-Down E-Axle Motor Test Bench and Control Implementation 
